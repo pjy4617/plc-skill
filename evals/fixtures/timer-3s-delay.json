@@ -1,0 +1,11 @@
+[
+  { "id":"t1", "name":"insert_rung", "input":{"comment":"TMR T0: X0 유지 3초 카운트"} },
+  { "id":"t2", "name":"add_element", "input":{"rungIndex":0,"elementType":"NO_CONTACT","device":"X0","row":0,"col":0} },
+  { "id":"t3", "name":"add_element", "input":{"rungIndex":0,"elementType":"FUNCTION","device":"TMR T0 K30","row":0,"col":8} },
+  { "id":"t4", "name":"insert_rung", "input":{"comment":"T0 접점 → Y0 출력"} },
+  { "id":"t5", "name":"add_element", "input":{"rungIndex":1,"elementType":"NO_CONTACT","device":"T0","row":0,"col":0} },
+  { "id":"t6", "name":"add_element", "input":{"rungIndex":1,"elementType":"COIL","device":"Y0","row":0,"col":10} },
+  { "id":"t7", "name":"set_device_comment", "input":{"device":"X0","comment":"지연 기동 입력"} },
+  { "id":"t8", "name":"set_device_comment", "input":{"device":"T0","comment":"3초 타이머"} },
+  { "id":"t9", "name":"set_device_comment", "input":{"device":"Y0","comment":"지연 기동 출력"} }
+]

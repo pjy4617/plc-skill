@@ -1,0 +1,80 @@
+{
+  "skill_name": "e-plc-ladder",
+  "evals": [
+    {
+      "id": 1,
+      "name": "self-hold-motor",
+      "prompt": "X0(기동 버튼)을 누르면 모터 Y0가 ON되고 자기유지된다. X1(정지 버튼)을 누르면 Y0가 OFF된다. 한 번 기동 후 X0를 놓아도 유지되어야 한다.",
+      "fixtureFile": "fixtures/self-hold-motor.json",
+      "expected_output": "Rung 1개, X0+Y0 병렬 OR, NC X1 직렬, COIL Y0. IL: LD X0 / LD Y0 / ORB / ANI X1 / OUT Y0 / END",
+      "scenario": {
+        "name": "자기유지 동작",
+        "cycleMs": 10,
+        "settleMs": 200,
+        "steps": [
+          { "inputs": {"X1": 0, "X0": 0}, "expect": {"Y0": 0}, "waitMs": 200 },
+          { "inputs": {"X0": 1},          "expect": {"Y0": 1}, "waitMs": 250 },
+          { "inputs": {"X0": 0},          "expect": {"Y0": 1}, "waitMs": 250 },
+          { "inputs": {"X1": 1},          "expect": {"Y0": 0}, "waitMs": 250 },
+          { "inputs": {"X1": 0, "X0": 0}, "expect": {"Y0": 0}, "waitMs": 200 }
+        ]
+      },
+      "assertions": [
+        { "name": "rung_count == 1",            "type": "project_metric",  "path": "project.rungs.length",  "op": "==", "value": 1 },
+        { "name": "IL 포함 ORB",                 "type": "il_contains",     "value": "ORB" },
+        { "name": "IL 포함 ANI X1",              "type": "il_contains",     "value": "ANI X1" },
+        { "name": "IL 포함 OUT Y0",              "type": "il_contains",     "value": "OUT Y0" },
+        { "name": "시나리오 전부 통과",           "type": "sim_pass_rate",   "op": ">=", "value": 1.0 }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "timer-3s-delay",
+      "prompt": "X0를 누른 뒤 3초 유지되면 Y0가 ON된다. X0를 떼면 즉시 해제. 타이머는 T0 사용. 미쯔비시 스타일로 OUT T0 K30.",
+      "fixtureFile": "fixtures/timer-3s-delay.json",
+      "expected_output": "Rung 2개. Rung0: LD X0 / OUT T0 K30. Rung1: LD T0 / OUT Y0. FUNCTION은 col=8.",
+      "scenario": {
+        "name": "3초 지연 타이머",
+        "cycleMs": 10,
+        "settleMs": 200,
+        "steps": [
+          { "inputs": {"X0": 0}, "expect": {"Y0": 0},            "waitMs": 200 },
+          { "inputs": {"X0": 1}, "expect": {"Y0": 0},            "waitMs": 500 },
+          { "inputs": {},        "expect": {"Y0": 0},            "waitMs": 500 },
+          { "inputs": {},        "expect": {"Y0": 1, "T0": 1},   "waitMs": 2500 },
+          { "inputs": {"X0": 0}, "expect": {"Y0": 0, "T0": 0},   "waitMs": 300 }
+        ]
+      },
+      "assertions": [
+        { "name": "rung_count == 2",          "type": "project_metric", "path": "project.rungs.length", "op": "==", "value": 2 },
+        { "name": "IL 포함 OUT T0 K30",        "type": "il_contains", "value": "OUT T0 K30" },
+        { "name": "IL 포함 LD T0",             "type": "il_contains", "value": "LD T0" },
+        { "name": "시나리오 전부 통과",         "type": "sim_pass_rate", "op": ">=", "value": 1.0 }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "parallel-or",
+      "prompt": "X0 또는 X1 중 하나라도 ON이면 Y0 ON. 둘 다 OFF면 Y0 OFF. 병렬 회로로 구성.",
+      "fixtureFile": "fixtures/parallel-or.json",
+      "expected_output": "Rung 1개. X0(row0,col0), X1(row1,col0), VERTICAL (0,1)→(1,1), COIL Y0(col10). IL: LD X0 / LD X1 / ORB / OUT Y0 / END",
+      "scenario": {
+        "name": "X0 OR X1",
+        "cycleMs": 10,
+        "settleMs": 150,
+        "steps": [
+          { "inputs": {"X0": 0, "X1": 0}, "expect": {"Y0": 0}, "waitMs": 200 },
+          { "inputs": {"X0": 1},          "expect": {"Y0": 1}, "waitMs": 200 },
+          { "inputs": {"X0": 0, "X1": 1}, "expect": {"Y0": 1}, "waitMs": 200 },
+          { "inputs": {"X1": 0},          "expect": {"Y0": 0}, "waitMs": 200 }
+        ]
+      },
+      "assertions": [
+        { "name": "rung_count == 1",   "type": "project_metric", "path": "project.rungs.length", "op": "==", "value": 1 },
+        { "name": "IL 포함 ORB",       "type": "il_contains", "value": "ORB" },
+        { "name": "IL 포함 LD X1",     "type": "il_contains", "value": "LD X1" },
+        { "name": "시나리오 전부 통과", "type": "sim_pass_rate", "op": ">=", "value": 1.0 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+[
+  { "id":"t1", "name":"insert_rung", "input":{"comment":"모터 기동/정지 자기유지","insertAfterIndex":-1} },
+  { "id":"t2", "name":"add_element", "input":{"rungIndex":0,"elementType":"NO_CONTACT","device":"X0","row":0,"col":0} },
+  { "id":"t3", "name":"add_element", "input":{"rungIndex":0,"elementType":"NO_CONTACT","device":"Y0","row":1,"col":0} },
+  { "id":"t4", "name":"add_connection", "input":{"rungIndex":0,"fromRow":0,"fromCol":1,"toRow":1,"toCol":1} },
+  { "id":"t5", "name":"add_element", "input":{"rungIndex":0,"elementType":"NC_CONTACT","device":"X1","row":0,"col":2} },
+  { "id":"t6", "name":"add_element", "input":{"rungIndex":0,"elementType":"COIL","device":"Y0","row":0,"col":10} },
+  { "id":"t7", "name":"set_device_comment", "input":{"device":"X0","comment":"기동 버튼"} },
+  { "id":"t8", "name":"set_device_comment", "input":{"device":"X1","comment":"정지 버튼"} },
+  { "id":"t9", "name":"set_device_comment", "input":{"device":"Y0","comment":"모터 출력"} }
+]

@@ -1,0 +1,7 @@
+[
+  { "id":"t1", "name":"insert_rung", "input":{"comment":"X0 OR X1 → Y0 (병렬 접점)"} },
+  { "id":"t2", "name":"add_element", "input":{"rungIndex":0,"elementType":"NO_CONTACT","device":"X0","row":0,"col":0} },
+  { "id":"t3", "name":"add_element", "input":{"rungIndex":0,"elementType":"NO_CONTACT","device":"X1","row":1,"col":0} },
+  { "id":"t4", "name":"add_connection", "input":{"rungIndex":0,"fromRow":0,"fromCol":1,"toRow":1,"toCol":1} },
+  { "id":"t5", "name":"add_element", "input":{"rungIndex":0,"elementType":"COIL","device":"Y0","row":0,"col":10} }
+]
